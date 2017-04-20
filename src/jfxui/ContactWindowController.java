@@ -5,9 +5,17 @@
  */
 package jfxui;
 
+import db.home.bank.Account;
+import db.home.bank.AccountManager;
+import db.home.bank.Address;
+import db.home.bank.Agency;
+import db.home.bank.Bank;
+import db.home.bank.Postcode;
+import javafx.collections.FXCollections;
 import javafx.fxml.FXML;
 import javafx.scene.control.Label;
 import javax.persistence.EntityManager;
+import javax.persistence.TypedQuery;
 
 /**
  * FXML Controller class
@@ -23,21 +31,25 @@ public class ContactWindowController extends ControllerBase {
     
     public void initContactWindowController(Mediator mediator) {
         EntityManager em = mediator.createEntityManager();
-                
-        labelBank.setText("Bank : ");
-        labelAgency.setText("Agency : ");
-        labelAddress.setText("Address : ");
-        labelManager.setText("Manager : ");
-        labelPhone.setText("Phone : ");
-        labelEmail.setText("Email : ");
-        //TypedQuery<Transactions> q = em.createQuery("SELECT t FROM Transactions t WHERE t.idAccount.id =:acc", Transactions.class);
-        //q.setParameter("acc", 2).getResultList();
-        //List<Agency> agency = em.createQuery("SELECT a FROM Agency a", Agency.class).getResultList();
-        //List<Transactions> calendar = em.createQuery("SELECT ");
-        // Remplissage du tableview avec transactions
-        //this.monthChooser.setItems(FXCollections.observableList(calendar));
-	//this.listAgency.setItems(FXCollections.observableList(agency));
-        //this.listTransactions.setItems(FXCollections.observableList(q));
+        
+        this.labelBank.setText("Bank : " + em.createQuery("SELECT ag.idBank FROM Agency ag JOIN ag.accountCollection a WHERE a.id = 1", Bank.class).getSingleResult());
+        this.labelAgency.setText("Agency : " + em.createQuery("SELECT ag.agencyName FROM Agency ag JOIN ag.accountCollection a WHERE a.id = 1", Agency.class).getSingleResult());  
+        this.labelAddress.setText(
+                "Address : " 
+                + em.createQuery("SELECT ag.idAddress FROM Agency ag JOIN ag.accountCollection a WHERE a.id = 1", Address.class).getSingleResult()
+                + "\n                 "
+                + em.createQuery("SELECT ad.idPostcode FROM Address ad JOIN ad.agencyCollection ag JOIN ag.accountCollection a WHERE a.id = 1", Postcode.class).getSingleResult());
+        this.labelManager.setText(
+                "Manager : " 
+                + em.createQuery("SELECT am.name FROM AccountManager am JOIN am.idAgency ag JOIN ag.accountCollection a WHERE a.id = 1", AccountManager.class).getSingleResult()
+                + " "
+                + em.createQuery("SELECT am.firstName FROM AccountManager am JOIN am.idAgency ag JOIN ag.accountCollection a WHERE a.id = 1", AccountManager.class).getSingleResult());
+        this.labelPhone.setText(
+                "Phone : " 
+                + em.createQuery("SELECT am.phone FROM AccountManager am JOIN am.idAgency ag JOIN ag.accountCollection a WHERE a.id = 1", AccountManager.class).getSingleResult());
+        this.labelEmail.setText(
+                "Email : " 
+                + em.createQuery("SELECT am.email FROM AccountManager am JOIN am.idAgency ag JOIN ag.accountCollection a WHERE a.id = 1", AccountManager.class).getSingleResult());
     }
     
 }

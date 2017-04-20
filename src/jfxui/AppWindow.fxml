@@ -7,10 +7,16 @@
 <?import javafx.scene.control.SeparatorMenuItem?>
 <?import javafx.scene.control.SplitPane?>
 <?import javafx.scene.control.TitledPane?>
+<?import javafx.scene.control.TableView?>
+<?import javafx.scene.control.TableColumn?>
 <?import javafx.scene.layout.AnchorPane?>
 <?import javafx.scene.layout.VBox?>
 
-<TitledPane animated="false" collapsible="false" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="400.0" prefWidth="600.0" text="BankApp" xmlns="http://javafx.com/javafx/8.0.111" xmlns:fx="http://javafx.com/fxml/1" fx:controller="jfxui.AppWindowController">
+<TitledPane animated="false" collapsible="false" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="400.0" prefWidth="600.0" 
+            text="BankApp" 
+            xmlns="http://javafx.com/javafx/8.0.111" 
+            xmlns:fx="http://javafx.com/fxml/1" 
+            fx:controller="jfxui.AppWindowController">
   <content>
     <AnchorPane>
          <children>
@@ -73,7 +79,7 @@
               <items>
                 <AnchorPane SplitPane.resizableWithParent="false">
                      <children>
-                        <VBox layoutX="-1.0" layoutY="-1.0" AnchorPane.leftAnchor="0.0" AnchorPane.topAnchor="0.0">
+                        <VBox layoutX="-1.0" layoutY="-1.0" prefHeight="136.0" AnchorPane.leftAnchor="0.0" AnchorPane.topAnchor="0.0">
                            <children>
                               <Button mnemonicParsing="false" onAction="#handleButtonAccountCurrent" prefHeight="68.0" prefWidth="147.0" text="Compte Courant" />
                               <Button mnemonicParsing="false" onAction="#handleButtonAccountSaving" prefHeight="68.0" prefWidth="147.0" text="Compte Epargne" />
@@ -84,8 +90,8 @@
                      <children>
                         <SplitPane dividerPositions="0.18128654970760233" orientation="VERTICAL" prefHeight="344.0" prefWidth="450.0" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
                           <items>
-                            <AnchorPane minHeight="0.0" minWidth="0.0" prefHeight="65.0" prefWidth="444.0" />
-                            <AnchorPane fx:id="content" minHeight="0.0" minWidth="0.0" prefHeight="276.0" prefWidth="453.0" />
+                              <AnchorPane fx:id="contact" minHeight="0.0" minWidth="0.0" prefHeight="65.0" prefWidth="444.0" />
+                              <AnchorPane fx:id="content" minHeight="0.0" minWidth="0.0" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0"/>
                           </items>
                         </SplitPane>
                      </children></AnchorPane>

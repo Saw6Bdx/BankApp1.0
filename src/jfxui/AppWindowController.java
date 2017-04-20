@@ -68,6 +68,7 @@ public class AppWindowController extends ControllerBase{
         );
         controller.setFlagAccountType("Current");
         controller.initTransactionsWindowController(this.mediator);
+        content.getChildren().setAll(controller.getParent());
         
         ContactWindowController controller2 = (ContactWindowController)ControllerBase.loadFxmlBis(
                 "ContactWindow.fxml",
@@ -75,8 +76,6 @@ public class AppWindowController extends ControllerBase{
         );
         //controller.setFlagAccountType("Current");
         controller2.initContactWindowController(this.mediator);
-        
-        content.getChildren().setAll(controller.getParent());
         contact.getChildren().setAll(controller2.getParent());
     }
     
@@ -92,8 +91,15 @@ public class AppWindowController extends ControllerBase{
         controller.setFlagAccountType("Savings");
         controller.initTransactionsWindowController(this.mediator);
         
+        ContactWindowController controller2 = (ContactWindowController)ControllerBase.loadFxmlBis(
+                "ContactWindow.fxml",
+                this.mediator
+        );
+        //controller.setFlagAccountType("Current");
+        controller2.initContactWindowController(this.mediator);
+        
         content.getChildren().setAll(controller.getParent());
-        contact.getChildren().setAll(controller.getParent());
+        contact.getChildren().setAll(controller2.getParent());
     }
     
     private Mediator mediator = null;

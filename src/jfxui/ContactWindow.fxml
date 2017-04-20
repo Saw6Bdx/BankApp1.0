@@ -8,10 +8,10 @@
             xmlns:fx="http://javafx.com/fxml/1" 
             fx:controller="jfxui.ContactWindowController">
    <children>
-      <Label fx:id="labelBank" text="Bank" AnchorPane.leftAnchor="10.0" AnchorPane.topAnchor="5.0" />
-      <Label fx:id="labelAgency" text="Agency" AnchorPane.leftAnchor="10.0" AnchorPane.topAnchor="24.0" />
-      <Label fx:id="labelAddress" text="Address" AnchorPane.leftAnchor="10.0" AnchorPane.topAnchor="44.0" />
-      <Label fx:id="labelManager" text="Manager (name-firstname)" AnchorPane.rightAnchor="10.0" AnchorPane.topAnchor="5.0" />
+      <Label fx:id="labelBank" AnchorPane.leftAnchor="10.0" AnchorPane.topAnchor="5.0" />
+      <Label fx:id="labelAgency" AnchorPane.leftAnchor="10.0" AnchorPane.topAnchor="24.0" />
+      <Label fx:id="labelAddress" AnchorPane.leftAnchor="10.0" AnchorPane.topAnchor="44.0" />
+      <Label fx:id="labelManager" AnchorPane.rightAnchor="10.0" AnchorPane.topAnchor="5.0" />
       <Label fx:id="labelPhone" text="Phone" AnchorPane.rightAnchor="10.0" AnchorPane.topAnchor="24.0" />
       <Label fx:id="labelEmail" text="Email" AnchorPane.rightAnchor="10.0" AnchorPane.topAnchor="44.0" />
    </children>
