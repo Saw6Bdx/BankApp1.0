@@ -32,7 +32,7 @@ public class ContactWindowController extends ControllerBase {
     public void initContactWindowController(Mediator mediator) {
         EntityManager em = mediator.createEntityManager();
         
-        this.labelBank.setText("Bank : " + em.createQuery("SELECT ag.idBank FROM Agency ag JOIN ag.accountCollection a WHERE a.id = 1", Bank.class).getSingleResult());
+        this.labelBank.setText("Bank : " + em.createQuery("SELECT b.name FROM Bank b JOIN b.agencyCollection ag JOIN ag.accountCollection a WHERE a.id = 1", Bank.class).getSingleResult());
         this.labelAgency.setText("Agency : " + em.createQuery("SELECT ag.agencyName FROM Agency ag JOIN ag.accountCollection a WHERE a.id = 1", Agency.class).getSingleResult());  
         this.labelAddress.setText(
                 "Address : " 
