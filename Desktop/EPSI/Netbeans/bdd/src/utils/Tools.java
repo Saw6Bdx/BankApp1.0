@@ -4,7 +4,7 @@ import java.util.Calendar;
 import java.util.Date;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
-// test
+
 /**
  * Contains a list of tools which be can be use in most projects
  * @author Guillaume
