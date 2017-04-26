@@ -4,6 +4,7 @@
  * and open the template in the editor.
  */
 package db.home.bank;
+import utils.DateUtils;
 
 import java.io.Serializable;
 import java.util.Calendar;
@@ -23,7 +24,7 @@ import javax.xml.bind.annotation.XmlRootElement;
 
 /**
  *
- * @author Guest
+ * @author Charlotte
  */
 @Entity
 @XmlRootElement
@@ -80,7 +81,7 @@ public class AccountManager implements Serializable {
         if(assignementDate == null) {
             throw new NullPointerException("The assignementDate cannot be null.");
         }
-        if(assignementDate.getTime()>today().getTime()) {
+        if(assignementDate.getTime()>DateUtils.today().getTime()) {
             throw new IllegalArgumentException("assignementDate cannot be in the future.");
         }
         
@@ -157,7 +158,7 @@ public class AccountManager implements Serializable {
         if(assignementDate == null) {
             throw new NullPointerException("The assignementDate cannot be null.");
         }
-        if(assignementDate.getTime()>today().getTime()) {
+        if(assignementDate.getTime()>DateUtils.today().getTime()) {
             throw new IllegalArgumentException("assignementDate cannot be in the future.");
         }
         this.assignementDate = assignementDate;
@@ -169,10 +170,6 @@ public class AccountManager implements Serializable {
 
     public void setIdAgency(Agency idAgency) {
         this.idAgency = idAgency;
-    }
-    
-    private Date today() {
-        return Calendar.getInstance().getTime();
     }
 
     @Override
