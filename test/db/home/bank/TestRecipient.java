@@ -6,46 +6,61 @@
 package db.home.bank;
 
 import org.junit.Test;
-import projetJava.Recipient;
 import static org.junit.Assert.*;
+import org.junit.Before;
 
 /**
  *
  * @author Charlotte
  */
 public class TestRecipient {
-    // String name, String IBAN
+    // Recipient(Integer id, String name)
+    
+    @Before
+    public void setUp() {
+        this.tested = new Recipient(1, "foo");
+    }
+    
+    // constructeur, setter
+    @Test(expected = NullPointerException.class)
+    public void testRecipient_NameIsNull() {
+        new Recipient(1, null);
+    }
+    @Test(expected = IllegalArgumentException.class)
+    public void testRecipient_NameIsEmpty() {
+        new Recipient(1, "");
+    }
+    @Test(expected = NullPointerException.class)
+    public void testSetRecipient_NameIsNull() {
+        this.tested.setName(null);
+    }
+    @Test(expected = IllegalArgumentException.class)
+    public void testSetRecipient_NameIsEmpty() {
+        this.tested.setName("");
+    }
     
     @Test(expected = NullPointerException.class)
-    public void testTask_NameIsNull() {
-        new Recipient(null, "FR00000000000");
+    public void testSetRecipient_IbanIsNull() {
+        this.tested.setIban(null);
     }
-    
     @Test(expected = IllegalArgumentException.class)
-    public void testTask_NameIsEmpty() {
-        new Recipient("", "FR00000000000");
-    }
-    
-    @Test(expected = NullPointerException.class)
-    public void testTask_IBANIsNull() {
-        new Recipient("Mamie", null);
-    }
-    
-    @Test(expected = IllegalArgumentException.class)
-    public void testTask_IBANIsInvalid() {
-        new Recipient("Mamie", "00000000000");
+    public void testSetRecipient_IbanIsInvalid() {
+        this.tested.setIban("12345678901");
     }
 
+    // getter
     @Test
-    public void testGetRecipient_name() {
-        this.tested = new Recipient("Mamie", "FR00000000000");
-        assertEquals("Mamie", this.tested.getRecipient_name());
+    public void testGetId() {
+        assertEquals((Integer)1, this.tested.getId());
     }
-
     @Test
-    public void testGetRecipient_IBAN() {
-        this.tested = new Recipient("Mamie", "FR00000000000");
-        assertEquals("FR00000000000", this.tested.getRecipient_IBAN());
+    public void testGetName() {
+        assertEquals("foo", this.tested.getName());
+    }
+    @Test
+    public void testGetIban() {
+        this.tested.setIban("FR00000000000");
+        assertEquals("FR00000000000", this.tested.getIban());
     }
     
     private Recipient tested;

@@ -196,6 +196,6 @@ public class Holder implements Serializable {
 
     @Override
     public String toString() {
-        return (this.name + this.firstname);
+        return this.name + " " + this.firstname;
     }
 }

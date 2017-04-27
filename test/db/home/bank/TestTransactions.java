@@ -10,124 +10,105 @@ import java.util.Date;
 import java.util.GregorianCalendar;
 import org.junit.Before;
 import org.junit.Test;
-import projetJava.Transactions;
 import static org.junit.Assert.*;
 
 /**
  *
- * @author Guest
+ * @author Mary
  */
 public class TestTransactions {
-    
-    public TestTransactions() {
-    }
+    // Transactions(Integer id, String label, double amount, Date date, Date endDate)
     
     @Before
     public void setUp() {
         Calendar cal = new GregorianCalendar(2017, Calendar.APRIL, 11, 15, 29, 15);
-        this.tested = new Transactions("foo",2.0,cal.getTime(),cal.getTime(),2,"bar","hebdo","CB");
+        this.tested = new Transactions(1, "foo", 2.0, cal.getTime(), cal.getTime());
+        // 2,"bar","hebdo","CB"
     }
     
-    // Tests des constructeurs
+    // Constructeur, setter
     @Test(expected = NullPointerException.class)
     public void testTransactions_LabelIsNull() {
-        new Transactions(null,2.0,new Date(0),new Date(0),2,"bar","hebdo","CB");
+        new Transactions(1, null, 2.0, new Date(0), new Date(0));
     }
-    
     @Test(expected = IllegalArgumentException.class)
     public void testTransactions_LabelIsEmpty() {
-        new Transactions("",2.0,new Date(0),new Date(0),2,"bar","hebdo","CB");
+        new Transactions(1, "", 2.0, new Date(0), new Date(0));
+    }
+    @Test(expected = NullPointerException.class)
+    public void testSetTransactions_LabelIsNull() {
+        this.tested.setLabel(null);
+    }
+    @Test(expected = IllegalArgumentException.class)
+    public void testSetTransactions_LabelIsEmpty() {
+        this.tested.setLabel("");
     }
     
     @Test(expected = NullPointerException.class)
     public void testTransactions_DateIsNull() {
-        new Transactions("foo",2.0,null,new Date(0),2,"bar","hebdo","CB");
+        new Transactions(1, "foo", 2.0, null, new Date(0));
     }
-    
-    /*@Test(expected = IllegalArgumentException.class)
-    public void testTransactions_DateIsEmpty() {
-        new Transactions("foo",2.0,"",new Date(0),2,"bar","hebdo","CB");
-    }*/
+    @Test(expected = NullPointerException.class)
+    public void testSetTransactions_DateIsNull() {
+        this.tested.setDate(null);
+    }
     
     @Test(expected = NullPointerException.class)
     public void testTransactions_EndDateIsNull() {
-        new Transactions("foo",2.0,new Date(0),null,2,"bar","hebdo","CB");
+        new Transactions(1, "foo", 2.0, new Date(0), null);
     }
-    
-    /*@Test(expected = IllegalArgumentException.class)
-    public void testTransactions_EndDateIsEmpty() {
-        new Transactions("foo",2.0,new Date(0),"",2,"bar","hebdo","CB");
-    }*/
-    
     @Test(expected = NullPointerException.class)
-    public void testTransactions_CommentIsNull() {
-        new Transactions("foo",2.0,new Date(0),new Date(0),2,null,"hebdo","CB");
-    }
-    
-    @Test(expected = NullPointerException.class)
-    public void testTransactions_PeriodUnitIsNull() {
-        new Transactions("foo",2.0,new Date(0),new Date(0),2,"bar",null,"CB");
-    }
-    
-    @Test(expected = NullPointerException.class)
-    public void testTransactions_TransactionTypeIsNull() {
-        new Transactions("foo",2.0,new Date(0),new Date(0),2,"bar","hebdo",null);
+    public void testSetTransactions_EndDateIsNull() {
+        this.tested.setEndDate(null);
     }
     
     @Test(expected = IllegalArgumentException.class)
-    public void testTransactions_TransactionTypeIsEmpty() {
-        new Transactions("foo",2.0,new Date(0),new Date(0),2,"bar","hebdo","");
+    public void testSetTransactions_DayNbIsInvalid(){
+        this.tested.setDayNb(31);
     }
     
+    @Test(expected = NullPointerException.class)
+    public void testTransactions_CommentIsNull() {
+        this.tested.setComment(null);
+    }
     
-    // Tests des getters
-    
+    // getter
+    @Test
+    public void testGetId() {
+        assertEquals((Integer)1,this.tested.getId());
+    }
     @Test
     public void testGetLabel() {
         assertEquals("foo",this.tested.getLabel());
     }
-    
     @Test
     public void testGetAmount() {
         assertEquals(2.0,this.tested.getAmount(),0.0);
     }
-    
     @Test
     public void testGetDate() {
         assertEquals(
-                new GregorianCalendar(2017, Calendar.APRIL, 11, 15, 29, 15).getTime(),
-                this.tested.getDate()
+            new GregorianCalendar(2017, Calendar.APRIL, 11, 15, 29, 15).getTime(),
+            this.tested.getDate()
         );
     }
-    
     @Test
     public void testGetEndDate() {
         assertEquals(
-                new GregorianCalendar(2017, Calendar.APRIL, 11, 15, 29, 15).getTime(),
-                this.tested.getEndDate()
+            new GregorianCalendar(2017, Calendar.APRIL, 11, 15, 29, 15).getTime(),
+            this.tested.getEndDate()
         );
     }
-    
     @Test
     public void testGetDayNb() {
-        assertEquals(2,this.tested.getDayNb());
+        this.tested.setDayNb(2);
+        assertEquals((Integer)2,this.tested.getDayNb());
     }
-    
     @Test
     public void testGetComment() {
+        this.tested.setComment("bar");
         assertEquals("bar",this.tested.getComment());
     }
     
-    @Test
-    public void testGetPeriodUnit() {
-        assertEquals("hebdo",this.tested.getPeriodUnit());
-    }
-    
-    @Test
-    public void testGetTransactionType() {
-        assertEquals("CB",this.tested.getTransactionType());
-    }
-    
     private Transactions tested;
-    
 }
