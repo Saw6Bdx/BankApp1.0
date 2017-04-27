@@ -143,7 +143,12 @@ public class Address implements Serializable {
 
     @Override
     public String toString() {
-        return (this.line1 + "\n                 " + this.line2);
+        if(this.line2==null) {
+            return this.line1;
+        }
+        else {
+            return this.line1 + "\n                 " + this.line2;
+        }
     }
     
 }

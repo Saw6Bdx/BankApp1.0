@@ -18,6 +18,8 @@ import javax.persistence.ManyToMany;
 import javax.persistence.ManyToOne;
 import javax.persistence.NamedQueries;
 import javax.persistence.NamedQuery;
+import javax.persistence.Temporal;
+import javax.persistence.TemporalType;
 import javax.xml.bind.annotation.XmlRootElement;
 import javax.xml.bind.annotation.XmlTransient;
 import utils.Check;
@@ -57,6 +59,7 @@ public class Holder implements Serializable {
     private String name;
     @Basic(optional = false)
     private String firstname;
+    @Temporal(TemporalType.DATE)
     private Date birthday;
     private String phone;
     @Basic(optional = false)
