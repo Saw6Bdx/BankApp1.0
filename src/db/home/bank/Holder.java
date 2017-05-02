@@ -44,7 +44,7 @@ public class Holder implements Serializable {
     /*  id INT NOT NULL PRIMARY KEY AUTO_INCREMENT,
 	name VARCHAR(250) NOT NULL,
 	firstname VARCHAR(250) NOT NULL,
-        birthday DATE, /!\ oublié, à ajouter dans la bdd !!!
+        birthday DATE,
 	phone VARCHAR(250),
 	login VARCHAR(250) NOT NULL,
 	password VARCHAR(250) NOT NULL,
