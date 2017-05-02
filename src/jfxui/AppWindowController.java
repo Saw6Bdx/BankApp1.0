@@ -57,6 +57,30 @@ public class AppWindowController extends ControllerBase {
         }
     }
 
+    /**
+     * Method which opens the transactions from the selected account in the list
+     */
+    @FXML
+    private void handleOpenAccount(MouseEvent event) throws IOException {
+        this.mediator = getMediator();
+
+        TransactionsWindowController controller = (TransactionsWindowController) ControllerBase.loadFxml(
+                "TransactionsWindow.fxml",
+                this.mediator
+        );
+        controller.setFlagAccount(this.listAccount.getSelectionModel().getSelectedItem().getId());
+        controller.initTransactionsWindowController(this.mediator);
+        content.getChildren().setAll(controller.getParent());
+
+        ContactWindowController controller2 = (ContactWindowController) ControllerBase.loadFxml(
+                "ContactWindow.fxml",
+                this.mediator
+        );
+        controller2.setFlagAccount(this.listAccount.getSelectionModel().getSelectedItem().getId());
+        controller2.initContactWindowController(this.mediator);
+        contact.getChildren().setAll(controller2.getParent());
+    }
+    
     @FXML
     private void handleMenuFileChangeUser(ActionEvent event) throws IOException {
         this.emf = Persistence.createEntityManagerFactory("BankAppPU");
@@ -242,32 +266,6 @@ public class AppWindowController extends ControllerBase {
         stage.show();
     }
     
-    /**
-     * Method which opens the transactions from the selected account in the list
-     */
-    @FXML
-    private void handleOpenAccount(MouseEvent event) throws IOException {
-        
-        this.emf = Persistence.createEntityManagerFactory("BankAppPU");
-        this.mediator = new Mediator(this.emf);
-
-        TransactionsWindowController controller = (TransactionsWindowController) ControllerBase.loadFxml(
-                "TransactionsWindow.fxml",
-                this.mediator
-        );
-        controller.setFlagAccount(this.listAccount.getSelectionModel().getSelectedItem().getId());
-        controller.initTransactionsWindowController(this.mediator);
-        content.getChildren().setAll(controller.getParent());
-
-        ContactWindowController controller2 = (ContactWindowController) ControllerBase.loadFxml(
-                "ContactWindow.fxml",
-                this.mediator
-        );
-        controller2.setFlagAccount(this.listAccount.getSelectionModel().getSelectedItem().getId());
-        controller2.initContactWindowController(this.mediator);
-        contact.getChildren().setAll(controller2.getParent());
-    }
-
     @FXML
     private void handleContact(ActionEvent event) throws IOException {
         this.emf = Persistence.createEntityManagerFactory("BankAppPU");
