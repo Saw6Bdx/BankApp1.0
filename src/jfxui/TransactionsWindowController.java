@@ -29,11 +29,50 @@ public class TransactionsWindowController extends ControllerBase{
     @Override
     public void initialize(Mediator mediator){       
         this.monthChooser.getItems().addAll("Month...", "January", "February", "March", "April", "May", "June", "July",  "August", "September", "October", "November", "December");
-        //this.monthChooser.getItems().addAll(Calendar.JANUARY, Calendar.FEBRUARY, Calendar.MARCH, Calendar.APRIL, Calendar.MAY, Calendar.JUNE, Calendar.JULY, Calendar.AUGUST, Calendar.SEPTEMBER, Calendar.OCTOBER, Calendar.NOVEMBER, Calendar.DECEMBER);
-        
-        //TypedQuery<Transactions> q = em.createQuery("SELECT t FROM Transactions t WHERE t.idAccount.id =:acc AND t.", Transactions.class);
-        //this.monthChooser.setItems(FXCollections.observableList(q.setParameter("acc",  1).getResultList()));
-        
+        this.monthChooser.getSelectionModel().selectFirst(); 
+    }
+    
+    public int monthChooser(String str) {
+        int id = 0;
+        switch (str) {
+            case "January":
+                id = 1;
+                break;
+            case "February":
+                id = 2;
+                break;
+            case "March":
+                id = 3;
+                break;
+            case "April":
+                id = 4;
+                break;
+            case "May":
+                id = 5;
+                break;
+            case "June":
+                id = 6;
+                break;
+            case "July":
+                id = 7;
+                break;
+            case "August":
+                id = 8;
+                break;
+            case "September":
+                id = 9;
+                break;
+            case "October":
+                id = 10;
+                break;
+            case "November":
+                id = 11;
+                break;
+            case "December":
+                id = 12;
+                break;
+        }
+        return id;
     }
     
     public void initTransactionsWindowController(Mediator mediator){
@@ -42,5 +81,13 @@ public class TransactionsWindowController extends ControllerBase{
         this.listTransactions.setItems(FXCollections.observableList(q.setParameter("acc", this.flagAccount).getResultList()));
         em.close();
     }
-
+    
+    @FXML
+    private void handleChoiceBoxMonthChooser(){
+        EntityManager em = getMediator().createEntityManager();
+        TypedQuery<Transactions> q = em.createQuery("SELECT t FROM Transactions t WHERE t.idAccount.id =:acc AND FUNC('MONTH', t.date) =:month", Transactions.class);
+        this.listTransactions.setItems(FXCollections.observableList(q.setParameter("acc", this.flagAccount).setParameter("month", monthChooser(this.monthChooser.getValue())).getResultList()));
+        em.close();
+    }
+    
 }
