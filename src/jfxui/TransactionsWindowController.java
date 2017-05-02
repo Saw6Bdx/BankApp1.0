@@ -1,7 +1,6 @@
 package jfxui;
 
 import db.home.bank.Transactions;
-import java.util.Calendar;
 import javafx.collections.FXCollections;
 import javafx.fxml.FXML;
 import javafx.scene.control.ChoiceBox;
@@ -17,14 +16,14 @@ public class TransactionsWindowController extends ControllerBase{
     @FXML private TableView<Transactions> listTransactions;
     @FXML private ChoiceBox<String> monthChooser;
     
-    private String flagAccountType;
+    private int flagAccount;
     
     /**
-     * 
-     * @param flagAccountType Current or Savings
+     * Method which assigns the flagAccount id under mouse_clicked in AppWindow to this.flagAccount
+     * @param flagAccount id under mouse_clicked
      */
-    public void setFlagAccountType(String flagAccountType) {
-        this.flagAccountType = flagAccountType;
+    public void setFlagAccount(int flagAccount) {
+        this.flagAccount = flagAccount;
     }
     
     @Override
@@ -39,15 +38,8 @@ public class TransactionsWindowController extends ControllerBase{
     
     public void initTransactionsWindowController(Mediator mediator){
         EntityManager em = mediator.createEntityManager();
-        int typeAccount;
-        if (flagAccountType.equals("Current")) {
-            typeAccount = 1;
-        }       
-        else { // Savings
-            typeAccount = 2;
-        }
         TypedQuery<Transactions> q = em.createQuery("SELECT t FROM Transactions t WHERE t.idAccount.id =:acc", Transactions.class);
-        this.listTransactions.setItems(FXCollections.observableList(q.setParameter("acc",  typeAccount).getResultList()));
+        this.listTransactions.setItems(FXCollections.observableList(q.setParameter("acc", this.flagAccount).getResultList()));
         em.close();
     }
 
