@@ -1,0 +1,17 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.scene.control.TitledPane?>
+<?import javafx.scene.layout.AnchorPane?>
+<?import javafx.scene.control.ChoiceBox?>
+<?import javafx.scene.control.Label?>
+
+<TitledPane alignment="CENTER" animated="false" collapsible="false" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="300.0" prefWidth="400.0" text="BankApp - Assign a new holder" textAlignment="CENTER" xmlns="http://javafx.com/javafx/8.0.111" xmlns:fx="http://javafx.com/fxml/1" fx:controller="jfxui.NewUserWindowController">
+<content>
+<AnchorPane prefHeight="336.0" prefWidth="600.0">
+   <children>
+      <Label layoutX="21.0" layoutY="211.0" text="Account" AnchorPane.leftAnchor="30.0" AnchorPane.topAnchor="211.0" />
+      <ChoiceBox fx:id="choiceAccount" layoutX="72.0" layoutY="207.0" prefHeight="25.0" prefWidth="401.0" AnchorPane.leftAnchor="80.0" AnchorPane.rightAnchor="19.0" AnchorPane.topAnchor="207.0" />
+   </children>
+</AnchorPane>
+</content>
+</TitledPane>
