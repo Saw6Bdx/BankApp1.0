@@ -1,0 +1,26 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.scene.control.Button?>
+<?import javafx.scene.control.CheckBox?>
+<?import javafx.scene.control.Hyperlink?>
+<?import javafx.scene.control.Label?>
+<?import javafx.scene.control.PasswordField?>
+<?import javafx.scene.control.TextField?>
+<?import javafx.scene.control.TitledPane?>
+<?import javafx.scene.layout.AnchorPane?>
+
+<TitledPane alignment="CENTER" animated="false" collapsible="false" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="185.0" prefWidth="372.0" text="BankApp - Login" textAlignment="CENTER" xmlns="http://javafx.com/javafx/8.0.111" xmlns:fx="http://javafx.com/fxml/1" fx:controller="jfxui.LoginWindowController">
+  <content>
+    <AnchorPane minHeight="0.0" minWidth="0.0" prefHeight="183.0" prefWidth="366.0">
+         <children>
+            <Label alignment="CENTER_RIGHT" layoutX="62.0" layoutY="27.0" text="Login" />
+            <TextField fx:id="labelLogin" layoutX="112.0" layoutY="23.0" prefHeight="25.0" prefWidth="210.0" promptText="Login" />
+            <Label alignment="CENTER_RIGHT" layoutX="43.0" layoutY="67.0" text="Password" />
+            <PasswordField fx:id="labelPassword" layoutX="112.0" layoutY="63.0" prefHeight="25.0" prefWidth="210.0" promptText="************" />
+            <Button layoutX="268.0" layoutY="99.0" mnemonicParsing="false" onAction="#handleLoginWindowLogin" defaultButton="true" prefHeight="25.0" prefWidth="53.0" text="Login" />
+            <CheckBox layoutX="92.0" layoutY="103.0" mnemonicParsing="false" selected="true" text="Remember Me" />
+            <Button layoutX="207.0" layoutY="99.0" mnemonicParsing="false" onAction="#handleLoginWindowCreate" text="Create" />
+            <Hyperlink layoutX="222.0" layoutY="129.0" text="Forgot password ?" />
+         </children></AnchorPane>
+  </content>
+</TitledPane>

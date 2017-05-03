@@ -1,0 +1,94 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.scene.control.ListView?>
+<?import javafx.scene.control.Menu?>
+<?import javafx.scene.control.MenuBar?>
+<?import javafx.scene.control.MenuItem?>
+<?import javafx.scene.control.SeparatorMenuItem?>
+<?import javafx.scene.control.SplitPane?>
+<?import javafx.scene.control.TitledPane?>
+<?import javafx.scene.layout.AnchorPane?>
+
+<TitledPane fx:id="root" animated="false" collapsible="false" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="400.0" prefWidth="600.0" text="BankApp" xmlns="http://javafx.com/javafx/8.0.111" xmlns:fx="http://javafx.com/fxml/1" fx:controller="jfxui.AppWindowController">
+  <content>
+    <AnchorPane>
+         <children>
+            <MenuBar layoutX="-1.0" AnchorPane.leftAnchor="-12.0" AnchorPane.rightAnchor="-12.0" AnchorPane.topAnchor="-12.0">
+              <menus>
+                <Menu mnemonicParsing="false" text="File">
+                  <items>
+                        <MenuItem mnemonicParsing="false" onAction="#handleMenuFileNewUser" text="New user..." />
+                        <MenuItem mnemonicParsing="false" onAction="#handleMenuFileChangeUser" text="Change user..." />
+                        <MenuItem mnemonicParsing="false" onAction="#handleMenuModifyUserProfile" text="Modify user profile..." />
+                        <MenuItem mnemonicParsing="false" onAction="#handleMenuChangePassword" text="Modify password..." />
+                        <SeparatorMenuItem mnemonicParsing="false" />
+                        <MenuItem mnemonicParsing="false" text="Export my data..." />
+                        <SeparatorMenuItem mnemonicParsing="false" />
+                        <MenuItem mnemonicParsing="false" text="Preferences..." />
+                        <SeparatorMenuItem mnemonicParsing="false" />
+                        <MenuItem mnemonicParsing="false" onAction="#handleMenuFileClose" text="Close" />
+                  </items>
+                </Menu>
+                <Menu mnemonicParsing="false" text="Edit/Manage">
+                  <items>
+                        <MenuItem mnemonicParsing="false" onAction="#handleMenuEditNewAccount" text="New account..." />
+                        <MenuItem mnemonicParsing="false" text="Delete account" />
+                        <SeparatorMenuItem mnemonicParsing="false" />
+                        <MenuItem mnemonicParsing="false" onAction="#handleMenuModifyAccountManager" text="Modify account manager..." />
+                        <MenuItem mnemonicParsing="false" onAction="#handleMenuDeleteAccountManager" text="Delete account manager..." />
+                        <SeparatorMenuItem mnemonicParsing="false" />
+                        <MenuItem mnemonicParsing="false" onAction="#handleMenuEditRibIban" text="Edit Rib/Iban" />
+                        <SeparatorMenuItem mnemonicParsing="false" />
+                        <MenuItem mnemonicParsing="false" text="Cancel" />
+                  </items>
+                </Menu>
+                <Menu mnemonicParsing="false" text="My transactions">
+                  <items>
+                    <MenuItem mnemonicParsing="false" onAction="#handleMenuEditNewTransaction" text="New transaction..." />
+                    <MenuItem mnemonicParsing="false" text="Delete transaction" />
+                    <SeparatorMenuItem mnemonicParsing="false" />
+                    <MenuItem mnemonicParsing="false" text="Cancel" />
+                  </items>
+                </Menu>
+                  <Menu mnemonicParsing="false" text="My budget">
+                     <items>
+                        <MenuItem mnemonicParsing="false" onAction="#handleMenuBudgetCategories" text="My categories..." />
+                        <MenuItem mnemonicParsing="false" onAction="#handleMenuBudgetNewCategory" text="New category..." />
+                        <MenuItem mnemonicParsing="false" onAction="#handleMenuBudgetDeleteCategory" text="Delete category" />
+                        <SeparatorMenuItem mnemonicParsing="false" />
+                        <MenuItem mnemonicParsing="false" text="Cancel" />
+                     </items>
+                  </Menu>
+                  <Menu mnemonicParsing="false" text="My favorites">
+                     <items>
+                        <MenuItem mnemonicParsing="false" text="About" />
+                     </items>
+                  </Menu>
+                  <Menu mnemonicParsing="false" text="Help">
+                     <items>
+                        <MenuItem mnemonicParsing="false" onAction="#handleContact" text="Contact" />
+                        <MenuItem mnemonicParsing="false" onAction="#handleAbout" text="About" />
+                     </items>
+                  </Menu>
+              </menus>
+            </MenuBar>
+            <SplitPane dividerPositions="0.2483" layoutY="28.0" prefHeight="345.0" prefWidth="600.0" AnchorPane.bottomAnchor="-12.0" AnchorPane.leftAnchor="-12.0" AnchorPane.rightAnchor="-12.0" AnchorPane.topAnchor="16.0">
+              <items>
+                <AnchorPane SplitPane.resizableWithParent="false">
+                     <children>
+                        <ListView fx:id="listAccount" onMouseClicked="#handleOpenAccount" prefHeight="200.0" prefWidth="147.0" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0" />
+                     </children></AnchorPane>
+                <AnchorPane>
+                     <children>
+                        <SplitPane dividerPositions="0.18128654970760233" orientation="VERTICAL" prefHeight="344.0" prefWidth="450.0" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
+                          <items>
+                              <AnchorPane fx:id="contact" minHeight="0.0" minWidth="0.0" prefHeight="65.0" prefWidth="444.0" />
+                              <AnchorPane fx:id="content" minHeight="0.0" minWidth="0.0" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0" />
+                          </items>
+                        </SplitPane>
+                     </children></AnchorPane>
+              </items>
+            </SplitPane>
+         </children></AnchorPane>
+  </content>
+</TitledPane>
