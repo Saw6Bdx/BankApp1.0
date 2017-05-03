@@ -17,6 +17,7 @@ import javafx.scene.control.TextField;
 import javafx.stage.Stage;
 import javax.persistence.EntityManager;
 import javax.persistence.PersistenceException;
+import javax.persistence.TypedQuery;
 import utils.AlertMessage;
 import static utils.DateUtils.LocalDate2Date;
 import utils.Valid;
@@ -66,7 +67,23 @@ public class NewTransactionsWindowController extends ControllerBase {
     
     public int idAccount(String str) {
         int id = 0;
-        switch (str) {
+        try {
+            EntityManager em = getMediator().createEntityManager();
+            TypedQuery<Account> qAccount = em.createNamedQuery("Account.findAll", Account.class);
+            List<Account> accountList = qAccount.getResultList();
+            
+            for ( int i = 0 ; i < accountList.size() ; i++ ) {
+                if ( str.equals(accountList.get(i).getNumber()) ) {
+                    id = i;
+                }
+            }
+            
+            em.close();
+        } catch (PersistenceException e) {
+            
+        }
+        return id+1;
+        /*switch (str) {
             case "1324350971":
                 id = 1;
                 break;
@@ -74,12 +91,28 @@ public class NewTransactionsWindowController extends ControllerBase {
                 id = 2;
                 break;
         }
-        return id;
+        return id;*/
     }
     
     public int idTransactionType(String str) {
         int id = 0;
-        switch (str) {
+        try {
+            EntityManager em = getMediator().createEntityManager();
+            TypedQuery<TransactionType> qTransactionType = em.createNamedQuery("TransactionType.findAll", TransactionType.class);
+            List<TransactionType> transactionTypeList = qTransactionType.getResultList();
+            
+            for ( int i = 0 ; i < transactionTypeList.size() ; i++ ) {
+                if ( str.equals(transactionTypeList.get(i).getType()) ) {
+                    id = i;
+                }
+            }
+            
+            em.close();
+        } catch (PersistenceException e) {
+            
+        }
+        return id+1;
+        /*switch (str) {
             case "Transfer":
                 id = 1;
                 break;
@@ -96,12 +129,31 @@ public class NewTransactionsWindowController extends ControllerBase {
                 id = 5;
                 break;
         }
-        return id;
+        return id;*/
     }
     
     
     public int idCategory(String str) {
+        
         int id = 0;
+        
+        try {
+            EntityManager em = getMediator().createEntityManager();
+            TypedQuery<Category> qCategory = em.createNamedQuery("Category.findAll", Category.class);
+            List<Category> categoryList = qCategory.getResultList();
+            
+            for ( int i = 0 ; i < categoryList.size() ; i++ ) {
+                if ( str.equals(categoryList.get(i).getLabel()) ) {
+                    id = categoryList.get(i).getId();
+                }
+            }
+            
+            em.close();
+        } catch (PersistenceException e) {
+            
+        }
+        return id;
+/*        int id = 0;
         switch (str) {
             case "Transportation":
                 id = 1;
@@ -145,8 +197,8 @@ public class NewTransactionsWindowController extends ControllerBase {
             case "Saving":
                 id = 14;
                 break;
-        }
-        return id;
+        }*/
+        
     }
     
     
@@ -231,11 +283,9 @@ public class NewTransactionsWindowController extends ControllerBase {
                         idAccount(transactionsAccount.getNumber()) == 0 ? null : idAccount(transactionsAccount.getNumber())
                         );
                         
-                        
                         TransactionsBdd.setIdTransactionType(transactionTypeBdd);
                         TransactionsBdd.setIdAccount(AccountBdd);
                         TransactionsBdd.setIdCategory(CategoryBdd);
-                        
                         
                         EntityManager em = getMediator().createEntityManager();
 

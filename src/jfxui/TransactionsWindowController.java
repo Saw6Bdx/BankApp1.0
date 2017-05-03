@@ -1,9 +1,12 @@
 package jfxui;
 
+import db.home.bank.Account;
 import db.home.bank.Transactions;
+import java.util.List;
 import javafx.collections.FXCollections;
 import javafx.fxml.FXML;
 import javafx.scene.control.ChoiceBox;
+import javafx.scene.control.Label;
 import javafx.scene.control.TableView;
 import javax.persistence.EntityManager;
 import javax.persistence.TypedQuery;
@@ -15,8 +18,10 @@ import javax.persistence.TypedQuery;
 public class TransactionsWindowController extends ControllerBase{
     @FXML private TableView<Transactions> listTransactions;
     @FXML private ChoiceBox<String> monthChooser;
+    @FXML private Label labelBalance;
     
     private int flagAccount;
+    private String currency = "€";
     
     /**
      * Method which assigns the flagAccount id under mouse_clicked in AppWindow to this.flagAccount
@@ -78,16 +83,35 @@ public class TransactionsWindowController extends ControllerBase{
     public void initTransactionsWindowController(Mediator mediator){
         EntityManager em = mediator.createEntityManager();
         TypedQuery<Transactions> q = em.createQuery("SELECT t FROM Transactions t WHERE t.idAccount.id =:acc", Transactions.class);
-        this.listTransactions.setItems(FXCollections.observableList(q.setParameter("acc", this.flagAccount).getResultList()));
+        List<Transactions> transactionsList = q.setParameter("acc", this.flagAccount).getResultList();
+        listTransactions.setItems(FXCollections.observableList(transactionsList));
+        
+        //Getting the first balance
+        TypedQuery<Account> qFirstBalance = em.createQuery("SELECT a FROM Account a WHERE a.id =:acc", Account.class);
+        List<Account> accountList = qFirstBalance.setParameter("acc", this.flagAccount).getResultList();
+        
+        // Getting the amount of transactions
+        Transactions transactions = new Transactions();
+        double sum = accountList.get(0).getFirstBalance();
+        int nbTransactions = transactionsList.size();
+        for (int i = 0; i < nbTransactions; i++) {
+            transactions = transactionsList.get(i);
+            sum += transactions.getAmount();
+        }
+        // Setting balance
+        this.labelBalance.setText(sum + " " + this.currency);
+        
+        
         em.close();
     }
     
     @FXML
     private void handleChoiceBoxMonthChooser(){
         EntityManager em = getMediator().createEntityManager();
-        TypedQuery<Transactions> q = em.createQuery("SELECT t FROM Transactions t WHERE t.idAccount.id =:acc AND FUNC('MONTH', t.date) =:month", Transactions.class);
+        TypedQuery<Transactions> q = em.createQuery("SELECT t FROM Transactions t WHERE t.idAccount.id =:acc AND FUNC('MONTH', t.date) =:month AND FUNC('YEAR', t.date) = '2017'", Transactions.class);
         this.listTransactions.setItems(FXCollections.observableList(q.setParameter("acc", this.flagAccount).setParameter("month", monthChooser(this.monthChooser.getValue())).getResultList()));
         em.close();
     }
+    
     
 }
