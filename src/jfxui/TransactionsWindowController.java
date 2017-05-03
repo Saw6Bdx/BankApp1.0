@@ -2,6 +2,7 @@ package jfxui;
 
 import db.home.bank.Account;
 import db.home.bank.Transactions;
+import java.util.Calendar;
 import java.util.List;
 import javafx.collections.FXCollections;
 import javafx.fxml.FXML;
@@ -24,7 +25,7 @@ public class TransactionsWindowController extends ControllerBase{
     private String currency = "€";
     
     /**
-     * Method which assigns the flagAccount id under mouse_clicked in AppWindow to this.flagAccount
+     * Method which assigns the Account id under mouse_clicked in AppWindow to this.flagAccount
      * @param flagAccount id under mouse_clicked
      */
     public void setFlagAccount(int flagAccount) {
@@ -108,8 +109,8 @@ public class TransactionsWindowController extends ControllerBase{
     @FXML
     private void handleChoiceBoxMonthChooser(){
         EntityManager em = getMediator().createEntityManager();
-        TypedQuery<Transactions> q = em.createQuery("SELECT t FROM Transactions t WHERE t.idAccount.id =:acc AND FUNC('MONTH', t.date) =:month AND FUNC('YEAR', t.date) = '2017'", Transactions.class);
-        this.listTransactions.setItems(FXCollections.observableList(q.setParameter("acc", this.flagAccount).setParameter("month", monthChooser(this.monthChooser.getValue())).getResultList()));
+        TypedQuery<Transactions> q = em.createQuery("SELECT t FROM Transactions t WHERE t.idAccount.id =:acc AND FUNC('MONTH', t.date) =:month AND FUNC('YEAR', t.date) =:year", Transactions.class);
+        this.listTransactions.setItems(FXCollections.observableList(q.setParameter("acc", this.flagAccount).setParameter("year", Calendar.getInstance().getTime()).setParameter("month", monthChooser(this.monthChooser.getValue())).getResultList()));
         em.close();
     }
     
