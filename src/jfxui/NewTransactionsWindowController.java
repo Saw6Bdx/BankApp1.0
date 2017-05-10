@@ -10,7 +10,10 @@ import java.util.List;
 import javafx.collections.FXCollections;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
+import javafx.scene.control.Alert;
+import javafx.scene.control.Alert.AlertType;
 import javafx.scene.control.Button;
+import javafx.scene.control.ButtonType;
 import javafx.scene.control.ChoiceBox;
 import javafx.scene.control.DatePicker;
 import javafx.scene.control.TextField;
@@ -253,63 +256,70 @@ public class NewTransactionsWindowController extends ControllerBase {
         Account transactionsAccount = choiceAccount.getValue();
         TransactionType transactionsType = choiceTransactionsType.getValue();
         
+        Alert alert = new Alert(AlertType.CONFIRMATION, "Do you confirm this new transaction ?", ButtonType.YES, ButtonType.NO);
+        alert.showAndWait();     
+        ButtonType result = alert.getResult();
+        if(result == ButtonType.NO) {
+	alert.close();
+        }
         
-        // Check the fields
-        if(Valid.isValidOnlyLetters(transactionsLabel)){ // que des lettres pour le moment
-            if(Valid.isValidDateNoFuture(transactionsCreationDate)){ // date de création antérieure à la date d'aujourd'hui
-                if(Valid.isValidDouble(transactionsAmount)){ // double
-                   
-                        // Saving informations ... 
-                        
-                        // ... table TRANSACTIONS
-                        Transactions TransactionsBdd = new Transactions();
-                        TransactionsBdd.setDate(transactionsCreationDate);
-                        TransactionsBdd.setAmount(Double.parseDouble(transactionsAmount));
-                        TransactionsBdd.setLabel(transactionsLabel);
-                        TransactionsBdd.setEndDate(transactionsEndDate);
-                                                
-                        // ... table TRANSACTIONTYPE
-                        TransactionType transactionTypeBdd = new TransactionType(
-                        idTransactionType(transactionsType.getType()) == 0 ? null : idTransactionType(transactionsType.getType())
-                        );
-                        
-                        // ... table CATEGORY
-                        Category CategoryBdd = new Category(
-                        idCategory(transactionsCategory.getLabel()) == 0 ? null : idCategory(transactionsCategory.getLabel())
-                        );
-                        
-                        // ... table ACCOUNT
-                        Account AccountBdd = new Account(
-                        idAccount(transactionsAccount.getNumber()) == 0 ? null : idAccount(transactionsAccount.getNumber())
-                        );
-                        
-                        
-                        TransactionsBdd.setIdTransactionType(transactionTypeBdd);
-                        TransactionsBdd.setIdAccount(AccountBdd);
-                        TransactionsBdd.setIdCategory(CategoryBdd);
-                        
-                        
-                        EntityManager em = getMediator().createEntityManager();
+        else{// Check the fields
+            if(Valid.isValidOnlyLetters(transactionsLabel)){ // que des lettres pour le moment
+                if(Valid.isValidDateNoFuture(transactionsCreationDate)){ // date de création antérieure à la date d'aujourd'hui
+                    if(Valid.isValidDouble(transactionsAmount)){ // double
 
-                        em.getTransaction().begin();
-                        em.persist(TransactionsBdd);
-                        em.getTransaction().commit();
+                            // Saving informations ... 
 
-                        //Close current window
-                        Stage current = (Stage)btnApply.getScene().getWindow();
-                        current.close();
-                   
+                            // ... table TRANSACTIONS
+                            Transactions TransactionsBdd = new Transactions();
+                            TransactionsBdd.setDate(transactionsCreationDate);
+                            TransactionsBdd.setAmount(Double.parseDouble(transactionsAmount));
+                            TransactionsBdd.setLabel(transactionsLabel);
+                            TransactionsBdd.setEndDate(transactionsEndDate);
+
+                            // ... table TRANSACTIONTYPE
+                            TransactionType transactionTypeBdd = new TransactionType(
+                            idTransactionType(transactionsType.getType()) == 0 ? null : idTransactionType(transactionsType.getType())
+                            );
+
+                            // ... table CATEGORY
+                            Category CategoryBdd = new Category(
+                            idCategory(transactionsCategory.getLabel()) == 0 ? null : idCategory(transactionsCategory.getLabel())
+                            );
+
+                            // ... table ACCOUNT
+                            Account AccountBdd = new Account(
+                            idAccount(transactionsAccount.getNumber()) == 0 ? null : idAccount(transactionsAccount.getNumber())
+                            );
+
+
+                            TransactionsBdd.setIdTransactionType(transactionTypeBdd);
+                            TransactionsBdd.setIdAccount(AccountBdd);
+                            TransactionsBdd.setIdCategory(CategoryBdd);
+
+
+                            EntityManager em = getMediator().createEntityManager();
+
+                            em.getTransaction().begin();
+                            em.persist(TransactionsBdd);
+                            em.getTransaction().commit();
+
+                            //Close current window
+                            Stage current = (Stage)btnApply.getScene().getWindow();
+                            current.close();
+
+                    }
+                    else {
+                        AlertMessage.alertMessage("transaction amount","Only numbers and point/coma allowed");
+                    }
                 }
                 else {
-                    AlertMessage.alertMessage("transaction amount","Only numbers and point/coma allowed");
+                    AlertMessage.alertMessage("creation date","Cannot be in the future");
                 }
             }
             else {
-                AlertMessage.alertMessage("creation date","Cannot be in the future");
+                AlertMessage.alertMessage("transaction label","Only letters allowed");
             }
-        }
-        else {
-            AlertMessage.alertMessage("transaction label","Only letters allowed");
         }
     }
 }

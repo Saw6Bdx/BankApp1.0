@@ -2,6 +2,7 @@ package jfxui;
 
 import db.home.bank.Account;
 import db.home.bank.Transactions;
+import java.util.Calendar;
 import java.util.List;
 import javafx.collections.FXCollections;
 import javafx.fxml.FXML;
@@ -19,6 +20,7 @@ public class TransactionsWindowController extends ControllerBase{
     @FXML private TableView<Transactions> listTransactions;
     @FXML private ChoiceBox<String> monthChooser;
     @FXML private Label labelBalance;
+    @FXML private Label labelInterest;
     
     private int flagAccount;
     private String currency = "€";
@@ -102,15 +104,78 @@ public class TransactionsWindowController extends ControllerBase{
         this.labelBalance.setText(sum + " " + this.currency);
         
         
+        
+        TypedQuery<Transactions> q333 = em.createQuery("SELECT t FROM Transactions t WHERE t.idAccount.id =:acc AND FUNC('YEAR', t.date) =:year", Transactions.class);
+        List<Transactions> savings = q333.setParameter("acc", this.flagAccount).setParameter("year", Calendar.getInstance().getTime()).getResultList();
+        
+        
+        // Getting the amount of transactions function of interest rate
+        Transactions transactionsSavings = new Transactions();
+        double interestRate = accountList.get(0).getInterestRate();
+        int nbSavings = transactionsList.size();
+        System.out.println(nbSavings);
+        System.out.println(savings.get(0));
+        System.out.println(savings.get(1));
+        System.out.println(savings.get(2));
+        
+        double sumSavings = 0, sumWithdrawal = 0, balance = 0;
+        for (int i = 0; i < nbSavings; i++) {
+            transactionsSavings = savings.get(i);
+            if(transactionsSavings.getAmount() < 0){
+                sumWithdrawal += transactions.getAmount();
+            }
+            else if(transactionsSavings.getAmount() > 0){
+                sumSavings += transactions.getAmount();
+            }
+            balance = sumSavings - sumWithdrawal;
+        }
+        int year = 2017;//Calendar.getInstance().getTime();
+        int daysPerYear;
+        if(year % 4 == 0 && year % 100 != 0 || year % 400 == 0){
+            daysPerYear = 366;
+        }
+        else{
+            daysPerYear = 365;
+        }
+        
+        double result = balance * interestRate / 24 * 15/*nbDaysFortnightly(1, 2017)*/ * 360 / daysPerYear / 15;
+        System.out.print(result);
+
+        // Setting balance
+        this.labelInterest.setText(result + " " + this.currency);
+        
         em.close();
     }
     
     @FXML
     private void handleChoiceBoxMonthChooser(){
         EntityManager em = getMediator().createEntityManager();
-        TypedQuery<Transactions> q = em.createQuery("SELECT t FROM Transactions t WHERE t.idAccount.id =:acc AND FUNC('MONTH', t.date) =:month AND FUNC('YEAR', t.date) = '2017'", Transactions.class);
-        this.listTransactions.setItems(FXCollections.observableList(q.setParameter("acc", this.flagAccount).setParameter("month", monthChooser(this.monthChooser.getValue())).getResultList()));
+        TypedQuery<Transactions> q = em.createQuery("SELECT t FROM Transactions t WHERE t.idAccount.id =:acc AND FUNC('MONTH', t.date) =:month AND FUNC('YEAR', t.date) =:year", Transactions.class);
+        this.listTransactions.setItems(FXCollections.observableList(q.setParameter("acc", this.flagAccount).setParameter("year", Calendar.getInstance().getTime()).setParameter("month", monthChooser(this.monthChooser.getValue())).getResultList()));
         em.close();
+    }
+    
+    private byte nbDaysFortnightly(int month, int year){
+        byte nbDaysFortnightly = 0;
+        
+        switch(month)
+        {
+        case Calendar.JANUARY : case Calendar.MARCH : case Calendar.MAY : case Calendar.JULY : case Calendar.AUGUST : case Calendar.OCTOBER : case Calendar.DECEMBER :
+            nbDaysFortnightly = 16 ;
+            break ;
+        case Calendar.APRIL : case Calendar.JUNE : case Calendar.SEPTEMBER : case Calendar.NOVEMBER :
+            nbDaysFortnightly = 15 ;
+            break ;
+        case Calendar.FEBRUARY :
+            if (year % 4 == 0 && year % 100 != 0 || year % 400 == 0){
+                nbDaysFortnightly = 14 ;
+            }
+            else{
+                nbDaysFortnightly = 13 ;
+            }
+            break ;
+        }
+        return nbDaysFortnightly;
     }
     
     

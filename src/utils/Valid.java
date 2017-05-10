@@ -7,7 +7,6 @@ package utils;
 
 import java.util.Calendar;
 import java.util.Date;
-import static jdk.nashorn.internal.runtime.JSType.isNumber;
 
 
 /**
@@ -148,6 +147,18 @@ public class Valid {
      */
     public static boolean isValidOnlyLetters(String str) {
         if ( str.matches("[a-zA-Z]+") || str.matches("[a-zA-Z]+('[a-zA-Z]+)") || str.matches("[a-zA-Z]+(-[a-zA-Z]+)") ) {
+            return true;
+        }
+        return false;
+    }
+    
+    /**
+     * Method which checks if the str contains only letters and numbers
+     * @str, the field to be checked 
+     * @return true if the field is not empty, false otherwise
+     */
+     public static boolean isValidLettersNumbers(String str) {
+        if (str.matches("[a-zA-Z]+[0-9]+")) {
             return true;
         }
         return false;

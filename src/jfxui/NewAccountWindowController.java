@@ -9,7 +9,6 @@ import db.home.bank.CountryCode;
 import db.home.bank.Postcode;
 import java.util.List;
 import javax.persistence.EntityManager;
-import javax.persistence.NamedQuery;
 import javax.persistence.PersistenceException;
 import javax.persistence.TypedQuery;
 
@@ -26,6 +25,8 @@ public class NewAccountWindowController extends ControllerBase {
     private Account account;
     private AccountType accountType;
     private CountryCode countryCode;
+        
+    private int flagHolder;
     
     @Override 
     public void initialize(Mediator mediator) {
@@ -99,8 +100,8 @@ public class NewAccountWindowController extends ControllerBase {
             List<AccountType> accountTypeList = qAccountType.getResultList();
             
             for ( int i = 0 ; i < accountTypeList.size() ; i++ ) {
-                if ( str.equals(accountTypeList.get(id).getType()) ) {
-                    id = i;
+                if ( str.equals(accountTypeList.get(i).getType()) ) {
+                    id = accountTypeList.get(i).getId();
                 }
             }
             
@@ -109,28 +110,19 @@ public class NewAccountWindowController extends ControllerBase {
             
         }
         return id;
-        /*switch (str) {
-            case "Current":
-                id = 1;
-                break;
-            case "Savings":
-                id = 2;
-                break;
-        }
-        return id;*/
     }
     
     
     public int idCountryCode(String str) {
-        int id = 1;
+        int id = 0;
         try {
             EntityManager em = getMediator().createEntityManager();
             TypedQuery<CountryCode> qCountryCode = em.createNamedQuery("CountryCode.findAll", CountryCode.class);
             List<CountryCode> countryCodeList = qCountryCode.getResultList();
             
             for ( int i = 0 ; i < countryCodeList.size() ; i++ ) {
-                if ( str.equals(countryCodeList.get(id).getCode()) ) {
-                    id = i;
+                if ( str.equals(countryCodeList.get(i).getCode()) ) {
+                    id = countryCodeList.get(i).getId();
                 }
             }
             
@@ -139,30 +131,6 @@ public class NewAccountWindowController extends ControllerBase {
             
         }
         return id;
-        /*switch (str) {
-            case "FR":
-                id = 1;
-                break;
-            case "CH":
-                id = 2;
-                break;
-            case "DE":
-                id = 3;
-                break;
-            case "GB":
-                id = 4;
-                break;
-            case "BS":
-                id = 5;
-                break;
-            case "KY":
-                id = 6;
-                break;
-            case "PA":
-                id = 7;
-                break;
-        }
-        return id;*/
     }
     
     
@@ -174,8 +142,8 @@ public class NewAccountWindowController extends ControllerBase {
             List<Bank> bankList = qBank.getResultList();
             
             for ( int i = 0 ; i < bankList.size() ; i++ ) {
-                if ( str.equals(bankList.get(id).getName()) ) {
-                    id = i;
+                if ( str.equals(bankList.get(i).getName()) ) {
+                    id = bankList.get(i).getId();
                 }
             }
             
@@ -184,24 +152,14 @@ public class NewAccountWindowController extends ControllerBase {
             
         }
         return id;
-        /*switch (str) {
-            case "BNP Paribas":
-                id = 1;
-                break;
-            case "Caisse Epargne":
-                id = 2;
-                break;
-            case "HSBC France":
-                id = 3;
-                break;
-            case "CIC":
-                id = 4;
-                break;
-            case "La Banque Postale":
-                id = 5;
-                break;
-        }
-        return id;*/
+    }
+    
+    public void setFlagHolder(int flagHolder) {
+        this.flagHolder = flagHolder;
+    }
+    
+    public int getFlagHolder() {
+        return this.flagHolder;
     }
     
 }

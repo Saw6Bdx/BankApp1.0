@@ -8,14 +8,20 @@ package jfxui;
 import db.home.bank.Category;
 import db.home.bank.Transactions;
 import java.io.IOException;
+import java.util.Collection;
 import java.util.List;
 import javafx.collections.FXCollections;
+import javafx.collections.ObservableList;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.scene.Node;
+import javafx.scene.Scene;
+import javafx.scene.chart.PieChart;
 import javafx.scene.control.Button;
 import javafx.scene.control.ChoiceBox;
 import javafx.scene.control.Label;
+import javafx.scene.layout.StackPane;
+import javafx.stage.Stage;
 import javax.persistence.EntityManager;
 import javax.persistence.PersistenceException;
 import javax.persistence.TypedQuery;
@@ -25,66 +31,23 @@ import utils.AlertMessage;
  *
  * @author Mary
  */
-public class BudgetCategoriesWindowController_v3 extends ControllerBase {
+public class BudgetCategoriesPieChartWindowController extends ControllerBase {
 
     @FXML
-    private Label labelAmount, labelPercentage, labelTotal;
-    @FXML
-    private ChoiceBox<Category> setCategoryList;
-    @FXML
-    private Button btnOK;
-
-    private String currency = "€"; // parameter to be set according to the currency
+    private PieChart pieChart;
+    
     private int flagIdAccount;
 
     @Override
     public void initialize(Mediator mediator) {
-
     }
     
-    public void initBudgetCategoriesWindowController(Mediator mediator){
-        
-        try {
-            EntityManager em = mediator.createEntityManager();
-            // Getting all the categories available
-            TypedQuery<Category> qCategory = em.createQuery("SELECT a FROM Category a", Category.class);
-            List<Category> categoryList = qCategory.getResultList();
-
-            this.setCategoryList.setItems(FXCollections.observableArrayList(categoryList));
-            this.setCategoryList.getSelectionModel().selectFirst();
-            em.close();
-        } catch (PersistenceException e) {
-            this.btnOK.setDisable(true);
-            AlertMessage.processPersistenceException(e);
-        }
-        
-    }
-    
-    /**
-     * Method which assigns the flagIdAccount under mouse_clicked in AppWindow to this.flagAccount
-     * @param flagAccount id under mouse_clicked
-     */
     public void setFlagAccount(int flagIdAccount) {
         this.flagIdAccount = flagIdAccount;
     }
     
-    /**
-     * Function which calculate the round value of a double
-     *
-     * @param A, double to be rounded
-     * @param B, precision (number after the coma)
-     * @return rounded value
-     */
-    private double round(double A, int B) {
-        return (double) ((int) (A * Math.pow(10, B) + .5)) / Math.pow(10, B);
-    }
-
-    @FXML
-    private void handleChoiceBoxCategory(ActionEvent event) throws IOException {
-
-        Category category = setCategoryList.getValue();
-        int idCategory = category.getId();
-
+    public void initBudgetCategoriesWindowController(Mediator mediator) {
+        
         EntityManager em = getMediator().createEntityManager();
 
         // Getting all the categories available
@@ -119,7 +82,6 @@ public class BudgetCategoriesWindowController_v3 extends ControllerBase {
 
                 // Checking if the category is identical
                 if (categories.equals(transactions.getIdCategory())) {
-                    System.out.println(categories);
                     tabSumCategory[i] += transactions.getAmount();
                     sumCat += transactions.getAmount();
                 }
@@ -136,17 +98,43 @@ public class BudgetCategoriesWindowController_v3 extends ControllerBase {
         }
 
         // Setting percentage into the window
-        this.labelTotal.setText(new Double(round(sum, 2)).toString() + " " + this.currency);
+        Collection<PieChart.Data> collPieChart = null;
+        for (int i = 0; i < nbCategories; i++) {
+
+            categories = categoryList.get(i);
+            System.out.println(categories.getLabel());
+            System.out.println(percentage[i]);
+            //categories.getLabel(), 10));
+            //new PieChart.Data(categories.getLabel(), tabSumCategory[i]));
+            collPieChart.add(new PieChart.Data("coucou",10));
+
+            }
+        
+        ObservableList<PieChart.Data> pieChartData;
+        pieChartData = FXCollections.observableArrayList(collPieChart);
+        this.pieChart.setData(pieChartData);
+        
+        /*this.labelTotal.setText(new Double(round(sum, 2)).toString() + " " + this.currency);
         this.labelAmount.setText(tabSumCategory[idCategory - 1] + " " + this.currency);
-        this.labelPercentage.setText(percentage[idCategory - 1] + " %");
+        this.labelPercentage.setText(percentage[idCategory - 1] + " %");*/
         
         em.close();
-    }
+        
+        /*ObservableList<PieChart.Data> pieChartData =
+                FXCollections.observableArrayList(
+                new PieChart.Data("Grapefruit", 13),
+                new PieChart.Data("Oranges", 25),
+                new PieChart.Data("Plums", 10),
+                new PieChart.Data("Pears", 22),
+                new PieChart.Data("Apples", 30)
+                );
+        
+        this.pieChart.setTitle("Imported Fruits");
+        this.pieChart.setData(pieChartData);*/
 
-    @FXML
-    private void handleButtonOK(ActionEvent event) throws IOException {
-        //Hide current window
-        ((Node) (event.getSource())).getScene().getWindow().hide();
     }
-
+    
+    private double round(double A, int B) {
+        return (double) ((int) (A * Math.pow(10, B) + .5)) / Math.pow(10, B);
+    }
 }
