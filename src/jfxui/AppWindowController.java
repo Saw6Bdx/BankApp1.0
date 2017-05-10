@@ -197,6 +197,7 @@ public class AppWindowController extends ControllerBase {
     @FXML
     private void handleMenuAssignNewHolder(ActionEvent event) throws IOException{
         AssignNewHolderController controller = (AssignNewHolderController) ControllerBase.loadFxml("AssignNewHolder.fxml", this.mediator);
+        controller.setFlagAccount(this.flagAccount);
         controller.setFlagHolder(this.flagHolder);
         controller.initAssignNewHolder();
         Scene scene = new Scene(controller.getParent());
