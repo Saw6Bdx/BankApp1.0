@@ -83,7 +83,7 @@ public class AppWindowController extends ControllerBase {
         );
         this.flagAccount = this.listAccount.getSelectionModel().getSelectedItem().getId();
         controller.setFlagAccount(this.flagAccount);
-        controller.initTransactionsWindowController(this.mediator);
+        controller.initTransactionsWindowController();//this.mediator);
         content.getChildren().setAll(controller.getParent());
 
         ContactWindowController controller2 = (ContactWindowController) ControllerBase.loadFxml(
@@ -273,26 +273,6 @@ public class AppWindowController extends ControllerBase {
         stage.show();
         
     }
-    
-    @FXML
-    private void handleMenuEditNewRecipient(ActionEvent event) throws IOException {
-
-        ControllerBase controller = ControllerBase.loadFxml("NewRecipientWindow.fxml", this.mediator);
-        Scene scene = new Scene(controller.getParent());
-        Stage stage = new Stage();
-        stage.setScene(scene);
-        stage.show();
-     }
-
-    @FXML
-    private void handleMenuEditDeleteRecipient(ActionEvent event) throws IOException {
-        
-        ControllerBase controller = ControllerBase.loadFxml("DeleteRecipientWindow.fxml", this.mediator);
-        Scene scene = new Scene(controller.getParent());
-        Stage stage = new Stage();
-        stage.setScene(scene);
-        stage.show();
-     }
 
     @FXML
     private void handleMenuBudgetCategories(ActionEvent event) throws IOException {
