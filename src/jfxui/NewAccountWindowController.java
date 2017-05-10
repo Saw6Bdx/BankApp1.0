@@ -7,6 +7,10 @@ import db.home.bank.Agency;
 import db.home.bank.Bank;
 import db.home.bank.CountryCode;
 import db.home.bank.Postcode;
+import java.util.List;
+import javax.persistence.EntityManager;
+import javax.persistence.PersistenceException;
+import javax.persistence.TypedQuery;
 
 /**
  *  
@@ -21,6 +25,8 @@ public class NewAccountWindowController extends ControllerBase {
     private Account account;
     private AccountType accountType;
     private CountryCode countryCode;
+        
+    private int flagHolder;
     
     @Override 
     public void initialize(Mediator mediator) {
@@ -85,43 +91,44 @@ public class NewAccountWindowController extends ControllerBase {
     
     
     public int idAccountType(String str) {
+        
         int id = 0;
-        switch (str) {
-            case "Current":
-                id = 1;
-                break;
-            case "Savings":
-                id = 2;
-                break;
+        
+        try {
+            EntityManager em = getMediator().createEntityManager();
+            TypedQuery<AccountType> qAccountType = em.createNamedQuery("AccountType.findAll", AccountType.class);
+            List<AccountType> accountTypeList = qAccountType.getResultList();
+            
+            for ( int i = 0 ; i < accountTypeList.size() ; i++ ) {
+                if ( str.equals(accountTypeList.get(i).getType()) ) {
+                    id = accountTypeList.get(i).getId();
+                }
+            }
+            
+            em.close();
+        } catch (PersistenceException e) {
+            
         }
         return id;
     }
     
     
     public int idCountryCode(String str) {
-        int id = 1;
-        switch (str) {
-            case "FR":
-                id = 1;
-                break;
-            case "CH":
-                id = 2;
-                break;
-            case "DE":
-                id = 3;
-                break;
-            case "GB":
-                id = 4;
-                break;
-            case "BS":
-                id = 5;
-                break;
-            case "KY":
-                id = 6;
-                break;
-            case "PA":
-                id = 7;
-                break;
+        int id = 0;
+        try {
+            EntityManager em = getMediator().createEntityManager();
+            TypedQuery<CountryCode> qCountryCode = em.createNamedQuery("CountryCode.findAll", CountryCode.class);
+            List<CountryCode> countryCodeList = qCountryCode.getResultList();
+            
+            for ( int i = 0 ; i < countryCodeList.size() ; i++ ) {
+                if ( str.equals(countryCodeList.get(i).getCode()) ) {
+                    id = countryCodeList.get(i).getId();
+                }
+            }
+            
+            em.close();
+        } catch (PersistenceException e) {
+            
         }
         return id;
     }
@@ -129,24 +136,30 @@ public class NewAccountWindowController extends ControllerBase {
     
     public int idBank(String str) {
         int id = 0;
-        switch (str) {
-            case "BNP Paribas":
-                id = 1;
-                break;
-            case "Caisse Epargne":
-                id = 2;
-                break;
-            case "HSBC France":
-                id = 3;
-                break;
-            case "CIC":
-                id = 4;
-                break;
-            case "La Banque Postale":
-                id = 5;
-                break;
+        try {
+            EntityManager em = getMediator().createEntityManager();
+            TypedQuery<Bank> qBank = em.createNamedQuery("Bank.findAll", Bank.class);
+            List<Bank> bankList = qBank.getResultList();
+            
+            for ( int i = 0 ; i < bankList.size() ; i++ ) {
+                if ( str.equals(bankList.get(i).getName()) ) {
+                    id = bankList.get(i).getId();
+                }
+            }
+            
+            em.close();
+        } catch (PersistenceException e) {
+            
         }
         return id;
+    }
+    
+    public void setFlagHolder(int flagHolder) {
+        this.flagHolder = flagHolder;
+    }
+    
+    public int getFlagHolder() {
+        return this.flagHolder;
     }
     
 }

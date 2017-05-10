@@ -32,7 +32,7 @@
                 <Menu mnemonicParsing="false" text="Edit/Manage">
                   <items>
                         <MenuItem mnemonicParsing="false" onAction="#handleMenuEditNewAccount" text="New account..." />
-                        <MenuItem mnemonicParsing="false" text="Delete account" />
+                        <MenuItem mnemonicParsing="false" onAction="#handleMenuDeleteAccount" text="Delete account" />
                         <SeparatorMenuItem mnemonicParsing="false" />
                         <MenuItem mnemonicParsing="false" onAction="#handleMenuModifyAccountManager" text="Modify account manager..." />
                         <MenuItem mnemonicParsing="false" onAction="#handleMenuDeleteAccountManager" text="Delete account manager..." />
@@ -45,14 +45,14 @@
                 <Menu mnemonicParsing="false" text="My transactions">
                   <items>
                     <MenuItem mnemonicParsing="false" onAction="#handleMenuEditNewTransaction" text="New transaction..." />
-                    <MenuItem mnemonicParsing="false" text="Delete transaction" />
+                    <MenuItem mnemonicParsing="false" onAction="#handleMenuDeleteTransaction" text="Delete transaction" />
                   </items>
                 </Menu>
                   <Menu mnemonicParsing="false" text="My budget">
                      <items>
                         <MenuItem mnemonicParsing="false" onAction="#handleMenuBudgetCategories" text="My categories..." />
-                        <MenuItem mnemonicParsing="false" text="New category..." />
-                        <MenuItem mnemonicParsing="false" text="Delete category" />
+                        <MenuItem mnemonicParsing="false" onAction="#handleMenuBudgetNewCategory" text="New category..." />
+                        <MenuItem mnemonicParsing="false" onAction="#handleMenuBudgetDeleteCategory" text="Delete category" />
                      </items>
                   </Menu>
                   <Menu mnemonicParsing="false" text="My favorites">

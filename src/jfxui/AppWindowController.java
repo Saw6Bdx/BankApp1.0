@@ -83,7 +83,7 @@ public class AppWindowController extends ControllerBase {
         );
         this.flagAccount = this.listAccount.getSelectionModel().getSelectedItem().getId();
         controller.setFlagAccount(this.flagAccount);
-        controller.initTransactionsWindowController(this.mediator);
+        controller.initTransactionsWindowController();//this.mediator);
         content.getChildren().setAll(controller.getParent());
 
         ContactWindowController controller2 = (ContactWindowController) ControllerBase.loadFxml(
@@ -148,17 +148,32 @@ public class AppWindowController extends ControllerBase {
     @FXML
     private void handleMenuEditNewAccount(ActionEvent event) throws IOException {
         
-        ControllerBase controller = ControllerBase.loadFxml("NewAccountWindow_page1.fxml", this.mediator);
-        //controller.setFlagHolder(this.flagholder);
+        NewAccountWindowController controller = (NewAccountWindowController) ControllerBase.loadFxml("NewAccountWindow_page1.fxml", this.mediator);
+        controller.setFlagHolder(this.flagHolder);
         Scene scene = new Scene(controller.getParent());
         Stage stage = new Stage();
         stage.setScene(scene);
         stage.show();
-
+        
         // New "account" button in the AppWindow
         // TO BE IMPLEMENTED ...
     }
+    
+    
+    @FXML
+    private void handleMenuDeleteAccount(ActionEvent event) throws IOException {
+        
+        DeleteAccountWindowController controller = (DeleteAccountWindowController) ControllerBase.loadFxml("DeleteAccountWindow.fxml", this.mediator);
+        controller.setFlagHolder(this.flagHolder);
+        controller.initDeleteAccountWindow();
+        Scene scene = new Scene(controller.getParent());
+        Stage stage = new Stage();
+        stage.setScene(scene);
+        stage.show();
+        
+    }
 
+    
     @FXML
     private void handleMenuModifyAccountManager(ActionEvent event) throws IOException {
         
@@ -243,15 +258,34 @@ public class AppWindowController extends ControllerBase {
         stage.setScene(scene);
         stage.show();
     }
-
+    
     @FXML
-    private void handleMenuBudgetCategories(ActionEvent event) throws IOException {
+    private void handleMenuDeleteTransaction(ActionEvent event) throws IOException {
         
-        ControllerBase controller = ControllerBase.loadFxml("BudgetCategoriesWindow_v3.fxml", this.mediator);
+        DeleteTransactionsWindowController controller = (DeleteTransactionsWindowController) ControllerBase.loadFxml("DeleteTransactionsWindow.fxml", this.mediator);
+        controller.setFlagHolder(this.flagHolder);
+        controller.initDeleteAccountWindow();
         Scene scene = new Scene(controller.getParent());
         Stage stage = new Stage();
         stage.setScene(scene);
         stage.show();
+        
+    }
+
+    @FXML
+    private void handleMenuBudgetCategories(ActionEvent event) throws IOException {
+        
+        BudgetCategoriesWindowController_v3 controller = (BudgetCategoriesWindowController_v3) ControllerBase.loadFxml(
+                "BudgetCategoriesWindow_v3.fxml", 
+                this.mediator
+        );
+        controller.setFlagAccount(this.listAccount.getSelectionModel().getSelectedItem().getId());
+        controller.initBudgetCategoriesWindowController(this.mediator);
+        Scene scene = new Scene(controller.getParent());
+        Stage stage = new Stage();
+        stage.setScene(scene);
+        stage.show();
+        
     }
 
     @FXML
@@ -298,3 +332,4 @@ public class AppWindowController extends ControllerBase {
     private EntityManagerFactory emf = null;
     private int flagHolder, flagAccount;
 }
+   

@@ -81,8 +81,8 @@ public class TransactionsWindowController extends ControllerBase{
         return id;
     }
     
-    public void initTransactionsWindowController(Mediator mediator){
-        EntityManager em = mediator.createEntityManager();
+    public void initTransactionsWindowController(){
+        EntityManager em = getMediator().createEntityManager();
         TypedQuery<Transactions> q = em.createQuery("SELECT t FROM Transactions t WHERE t.idAccount.id =:acc", Transactions.class);
         List<Transactions> transactionsList = q.setParameter("acc", this.flagAccount).getResultList();
         listTransactions.setItems(FXCollections.observableList(transactionsList));
@@ -100,11 +100,23 @@ public class TransactionsWindowController extends ControllerBase{
             sum += transactions.getAmount();
         }
         // Setting balance
-        this.labelBalance.setText(sum + " " + this.currency);
+        this.labelBalance.setText(new Double(round(sum,2)).toString() + " " + this.currency);
         
         
         em.close();
     }
+    
+    
+    /**
+     * Function which calculate the round value of a double
+     * @param A, double to be rounded
+     * @param B, precision (number after the coma)
+     * @return rounded value
+     */
+    private double round(double A, int B) {
+        return (double) ((int) (A * Math.pow(10, B) + .5)) / Math.pow(10, B);
+    }
+    
     
     @FXML
     private void handleChoiceBoxMonthChooser(){

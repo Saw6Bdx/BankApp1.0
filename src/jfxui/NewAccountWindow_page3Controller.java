@@ -7,9 +7,12 @@ import db.home.bank.Address;
 import db.home.bank.Agency;
 import db.home.bank.Bank;
 import db.home.bank.CountryCode;
+import db.home.bank.Holder;
 import db.home.bank.Postcode;
 import java.io.IOException;
+import java.util.Collection;
 import java.util.Date;
+import java.util.HashSet;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
@@ -53,6 +56,8 @@ public class NewAccountWindow_page3Controller extends NewAccountWindowController
         String accountManagerEmail = txtAccountManagerEmail.getText();
         Date accountManagerAssignementDate = LocalDate2Date(txtAccountManagerAssignementDate.getValue());
         
+        boolean flagNewBank = false;
+                    
         // Check the fields
         if (Valid.isValidOnlyLetters(accountManagerName)) {
             if (Valid.isValidOnlyLetters(accountManagerFirstName)) {
@@ -85,16 +90,19 @@ public class NewAccountWindow_page3Controller extends NewAccountWindowController
                     // ... table BANK
                     /* On peut supprimer le choix du code banque qui est forcèment 
                     lié au nom de la banque */
-                    Bank bankBdd = new Bank(
+                    /*Bank bankBdd = new Bank(
                             null, 
                             getBank().getName(), 
                             getBank().getBankCode()
-                    );
-                    /*Bank bankBdd = new Bank(
+                    );*/
+                    if ( idBank(getBank().getName()) == 0 ) {
+                        flagNewBank = true;
+                    }
+                    Bank bankBdd = new Bank(
                             idBank(getBank().getName()) == 0 ? null : idBank(getBank().getName()),
                             getBank().getName(),
-                            bankCode(getBank().getName())
-                    );*/
+                            getBank().getBankCode()
+                    );
 
                     // ... table AGENCY
                     Agency agencyBdd = new Agency(
@@ -148,18 +156,34 @@ public class NewAccountWindow_page3Controller extends NewAccountWindowController
                         accountManagerBdd.setEmail(accountManagerEmail);
                     }
                     accountManagerBdd.setIdAgency(agencyBdd);
-
+                    
+                    // ... table ASSIGN (in Holder and Account classes)
+                    EntityManager em = getMediator().createEntityManager();
+                    TypedQuery<Holder> qHolder = em.createQuery("SELECT a FROM Holder a WHERE a.id=:pid", Holder.class);
+                    qHolder.setParameter("pid", getFlagHolder());
+                    Holder holderBdd = qHolder.getSingleResult();
+                    
+                    Collection<Holder> collHolder = new HashSet();
+                    collHolder.add(holderBdd);
+                    accountBdd.setHolderCollection(collHolder);
+                    
+                    Collection<Account> collAccount = new HashSet();
+                    collAccount.add(accountBdd);
+                    holderBdd.setAccountCollection(collAccount);
+                    
                     /* Writing into the database the information where the user 
                     have written something new. No more adding datas into:
                     em.persist(accountTypeBdd); // --> pas écrire en bdd
                     em.persist(countryCodeBdd); // --> pas écrire en bdd
                     */
-                    EntityManager em = getMediator().createEntityManager();
+                    //EntityManager em = getMediator().createEntityManager();
 
                     em.getTransaction().begin();
                     em.persist(postcodeBdd);
                     em.persist(addressBdd);
-                    em.persist(bankBdd);
+                    if (flagNewBank) {
+                        em.persist(bankBdd);
+                    }
                     em.persist(agencyBdd);
                     em.persist(accountBdd);
                     em.persist(accountManagerBdd);

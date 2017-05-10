@@ -5,7 +5,7 @@
  */
 package jfxui;
 
-import db.home.bank.AccountManager;
+import db.home.bank.Account;
 import java.io.IOException;
 import java.util.List;
 import javafx.collections.FXCollections;
@@ -16,28 +16,40 @@ import javafx.scene.control.ChoiceBox;
 import javafx.stage.Stage;
 import javax.persistence.EntityManager;
 import javax.persistence.PersistenceException;
+import javax.persistence.TypedQuery;
 import utils.AlertMessage;
 
 /**
  *
  * @author Mary
  */
-public class DeleteAccountManagerWindowController extends ControllerBase {
+public class DeleteAccountWindowController extends ControllerBase {
 
-    @FXML private ChoiceBox<AccountManager> setAccountManagerName;
+    @FXML private ChoiceBox<Account> setAccountName;
     @FXML private Button btnCancel;
     @FXML private Button btnOK;
+    
+    private int flagHolder;
    
     @Override
     public void initialize(Mediator mediator) {
         
+    }
+    
+    public void setFlagHolder(int flagHolder) {
+        this.flagHolder = flagHolder;
+    }
+    
+    public void initDeleteAccountWindow() {
+        
         try {
-            EntityManager em = mediator.createEntityManager();
-            List<AccountManager> accountManager = em.createNamedQuery("AccountManager.findAll",AccountManager.class).getResultList();
+            EntityManager em = getMediator().createEntityManager();
+            //List<Account> account = em.createNamedQuery("Account.findAll",Account.class).getResultList();
+            TypedQuery<Account> qAccount = em.createQuery("SELECT a FROM Account a JOIN a.holderCollection h WHERE h.id=:pid", Account.class);
+            qAccount.setParameter("pid",this.flagHolder);
+            List<Account> account = qAccount.getResultList();
             
-            System.out.println(accountManager);
-
-            this.setAccountManagerName.setItems(FXCollections.observableArrayList(accountManager));
+            this.setAccountName.setItems(FXCollections.observableArrayList(account));
             em.close();
         }
 	catch(PersistenceException e) {
@@ -50,15 +62,15 @@ public class DeleteAccountManagerWindowController extends ControllerBase {
     @FXML
     private void handleBtnOK(ActionEvent event) throws IOException {
 
-        AccountManager accountManager = setAccountManagerName.getValue();
+        Account account = setAccountName.getValue();
 
-        System.out.println(accountManager.getId());
+        System.out.println(account.getId());
 
         EntityManager em = getMediator().createEntityManager();
 
-        AccountManager am = em.find(AccountManager.class, accountManager.getId());
+        Account acc = em.find(Account.class, account.getId());
         em.getTransaction().begin();
-        em.remove(am);
+        em.remove(acc);
         em.getTransaction().commit();
 
         //Close current window
