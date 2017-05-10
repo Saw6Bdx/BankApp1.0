@@ -26,12 +26,13 @@ public class TransactionsWindowController extends ControllerBase{
     private String currency = "€";
     
     /**
-     * Method which assigns the flagAccount id under mouse_clicked in AppWindow to this.flagAccount
+     * Method which assigns the Account id under mouse_clicked in AppWindow to this.flagAccount
      * @param flagAccount id under mouse_clicked
      */
     public void setFlagAccount(int flagAccount) {
         this.flagAccount = flagAccount;
     }
+    
     
     @Override
     public void initialize(Mediator mediator){       
@@ -82,8 +83,8 @@ public class TransactionsWindowController extends ControllerBase{
         return id;
     }
     
-    public void initTransactionsWindowController(Mediator mediator){
-        EntityManager em = mediator.createEntityManager();
+    public void initTransactionsWindowController(){
+        EntityManager em = getMediator().createEntityManager();
         TypedQuery<Transactions> q = em.createQuery("SELECT t FROM Transactions t WHERE t.idAccount.id =:acc", Transactions.class);
         List<Transactions> transactionsList = q.setParameter("acc", this.flagAccount).getResultList();
         listTransactions.setItems(FXCollections.observableList(transactionsList));
@@ -101,35 +102,25 @@ public class TransactionsWindowController extends ControllerBase{
             sum += transactions.getAmount();
         }
         // Setting balance
-        this.labelBalance.setText(sum + " " + this.currency);
+        this.labelBalance.setText(new Double(round(sum,2)).toString() + " " + this.currency);
         
+        /*
+        *   Code pour essayer d'afficher les interêts en temps réel
+        *   Encore quelques manips à réaliser, fonctionalité non utilisée pour le moment...
+        */
         
-        
-        TypedQuery<Transactions> q333 = em.createQuery("SELECT t FROM Transactions t WHERE t.idAccount.id =:acc AND FUNC('YEAR', t.date) =:year", Transactions.class);
-        List<Transactions> savings = q333.setParameter("acc", this.flagAccount).setParameter("year", Calendar.getInstance().getTime()).getResultList();
+        /*TypedQuery<Transactions> qSavings = em.createQuery("SELECT t FROM Transactions t WHERE t.idAccount.id =:acc AND FUNC('YEAR', t.date) =:year", Transactions.class);
+        List<Transactions> savings = qSavings.setParameter("acc", this.flagAccount).setParameter("year", Calendar.getInstance().getTime()).getResultList();
         
         
         // Getting the amount of transactions function of interest rate
         Transactions transactionsSavings = new Transactions();
         double interestRate = accountList.get(0).getInterestRate();
         int nbSavings = transactionsList.size();
-        System.out.println(nbSavings);
-        System.out.println(savings.get(0));
-        System.out.println(savings.get(1));
-        System.out.println(savings.get(2));
         
-        double sumSavings = 0, sumWithdrawal = 0, balance = 0;
-        for (int i = 0; i < nbSavings; i++) {
-            transactionsSavings = savings.get(i);
-            if(transactionsSavings.getAmount() < 0){
-                sumWithdrawal += transactions.getAmount();
-            }
-            else if(transactionsSavings.getAmount() > 0){
-                sumSavings += transactions.getAmount();
-            }
-            balance = sumSavings - sumWithdrawal;
-        }
-        int year = 2017;//Calendar.getInstance().getTime();
+        double sumSavings = 0, sumWithdrawal = 0, yearBalance, result = 0;
+        
+        int year = Calendar.getInstance().getTime().getYear() + 1900;
         int daysPerYear;
         if(year % 4 == 0 && year % 100 != 0 || year % 400 == 0){
             daysPerYear = 366;
@@ -138,14 +129,37 @@ public class TransactionsWindowController extends ControllerBase{
             daysPerYear = 365;
         }
         
-        double result = balance * interestRate / 24 * 15/*nbDaysFortnightly(1, 2017)*/ * 360 / daysPerYear / 15;
-        System.out.print(result);
-
+        for (int i = 0; i < nbSavings; i++) {
+            transactionsSavings = savings.get(i);
+            int month = savings.get(i).getDate().getMonth()+1;
+            if(transactionsSavings.getAmount() < 0){
+                sumWithdrawal += transactionsSavings.getAmount();
+            }
+            else if(transactionsSavings.getAmount() > 0){
+                sumSavings += transactionsSavings.getAmount();
+            }
+            yearBalance = sum + sumSavings - sumWithdrawal;
+            result += yearBalance * interestRate / 100 / 24 * nbDaysFortnightly(month, year) * 360 / daysPerYear / 15;
+        }
+        
         // Setting balance
-        this.labelInterest.setText(result + " " + this.currency);
+        this.labelInterest.setText(new Double(round(result,2)).toString() + " " + this.currency);*/       
         
         em.close();
+        
     }
+     
+    
+    /**
+     * Function which calculate the round value of a double
+     * @param A, double to be rounded
+     * @param B, precision (number after the coma)
+     * @return rounded value
+     */
+    private double round(double A, int B) {
+        return (double) ((int) (A * Math.pow(10, B) + .5)) / Math.pow(10, B);
+    }
+    
     
     @FXML
     private void handleChoiceBoxMonthChooser(){
@@ -158,7 +172,7 @@ public class TransactionsWindowController extends ControllerBase{
     private byte nbDaysFortnightly(int month, int year){
         byte nbDaysFortnightly = 0;
         
-        switch(month)
+        switch(month-1)
         {
         case Calendar.JANUARY : case Calendar.MARCH : case Calendar.MAY : case Calendar.JULY : case Calendar.AUGUST : case Calendar.OCTOBER : case Calendar.DECEMBER :
             nbDaysFortnightly = 16 ;
